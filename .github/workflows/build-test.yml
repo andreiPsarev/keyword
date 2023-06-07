@@ -35,4 +35,4 @@ jobs:
 
       - name: Run tests
         run: |
-          robot G:/keyword-main/src/test/java/robotframework/acceptance/file.robot
+          robot file.robot
