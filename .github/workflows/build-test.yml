@@ -1,38 +1,31 @@
-name: Build and Test
+name: Run Tests
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: [push]
 
 jobs:
-  build-and-test:
-    runs-on: windows-latest
+  test:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: 17
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-      - name: Clone repository
-        uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
+    - name: Install Dependencies
+      run: pip install robotframework robotframework-seleniumlibrary
 
-      - name: Install Robot Framework
-        run: pip install robotframework
+    - name: Run Tests
+      run: robot file.robot
 
-      - name: Install SeleniumLibrary
-        run: pip install robotframework-seleniumlibrary
-
-      - name: Run tests
-        run: |
-          robot file.robot
+    - name: Upload Test Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-results
+        path: |
+          output.xml
+          log.html
+          report.html
