@@ -1,4 +1,4 @@
-name: Сборка и тестирование
+name: Build and Test
 
 on:
   push:
@@ -13,26 +13,26 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Установка JDK
+      - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
           java-version: 17
 
-      - name: Клонирование репозитория
+      - name: Clone repository
         uses: actions/checkout@v2
 
-      - name: Установка Python
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
 
-      - name: Установка Robot Framework
+      - name: Install Robot Framework
         run: pip install robotframework
 
-      - name: Установка SeleniumLibrary
+      - name: Install SeleniumLibrary
         run: pip install robotframework-seleniumlibrary
 
-      - name: Запуск тестов
+      - name: Run tests
         run: |
           robot test.robot
