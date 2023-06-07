@@ -1,9 +1,10 @@
 *** Settings ***
 Library    SeleniumLibrary
+Library    Selenium2Library
 
 *** Test Cases ***
 Disabled Registration
-    Open Browser    http://127.0.0.1:7000/    chrome
+    Open Browser    http://127.0.0.1:7000/    chrome  options=add_argument("--headless")
     Set Window Size    974    1040
     Click Element    css=.hero__button
     Input Text    id=sign-up__first-name    Andrii
@@ -15,7 +16,7 @@ Disabled Registration
     [Teardown]    Close Browser
 
 Login
-    Open Browser    http://127.0.0.1:7000/    chrome
+    Open Browser    http://127.0.0.1:7000/    chrome  options=add_argument("--headless")
     Set Window Size    974    1040
 
     Wait Until Element Is Visible    link=Sign in
@@ -33,7 +34,7 @@ Login
     Wait Until Page Contains    Home | Universe
 
 Successful Add Blog Post
-    Open Browser    http://127.0.0.1:7000/    chrome
+    Open Browser    http://127.0.0.1:7000/    chrome  options=add_argument("--headless")
     Set Window Size    974    1040
 
     Wait Until Element Is Visible    link=Sign in
@@ -58,7 +59,7 @@ Successful Add Blog Post
     Click Element    css=.comment-form__button:nth-child(1)
 
 Successful Add Comment
-    Open Browser    http://127.0.0.1:7000/    chrome
+    Open Browser    http://127.0.0.1:7000/    chrome  options=add_argument("--headless")
     Set Window Size    974    1040
 
     Wait Until Page Contains Element    link=Sign in
@@ -79,7 +80,7 @@ Successful Add Comment
 
 
 Successful Registration
-    Open Browser    http://127.0.0.1:7000/    chrome
+    Open Browser    http://127.0.0.1:7000/    chrome  options=add_argument("--headless")
     Set Window Size    974    1040
 
     Click Element    css=.hero__button
