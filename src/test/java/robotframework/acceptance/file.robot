@@ -1,98 +1,43 @@
 *** Settings ***
-Library    SeleniumLibrary
-Library    Selenium2Library
-
+Library    RequestsLibrary
 
 *** Test Cases ***
 Disabled Registration
-    Open Browser    http://127.0.0.1:7000/    chrome  options=add_argument("--headless")    
-    Set Window Size    974    1040
-    Click Element    css=.hero__button
-    Input Text    id=sign-up__first-name    Andrii
-    Input Text    id=sign-up__last-name    Psarov
-    Input Text    id=sign-up__password    gdfhderfh
-    Click Element    css=.form__button
-    ${feedback}    Get Text    css=.form__row:nth-child(4) > .form__feedback
-    Should Be Equal As Strings    ${feedback}    Enter a valid email
-    [Teardown]    Close Browser
+    ${headers}=    Create Dictionary    Content-Type=application/json
+    ${payload}=    Create Dictionary    first_name=Andrii    last_name=Psarov    password=gdfhderfh
+    ${response}=    Post Request    http://127.0.0.1:7000/register    headers=${headers}    json=${payload}
+    Should Be Equal    ${response.status_code}    200
+    ${json_response}=    Get Json Value    ${response.content}    as_dict=True
+    Should Be Equal As Strings    ${json_response.error}    "Enter a valid email"
 
 Login
-    Open Browser    http://127.0.0.1:7000/    chrome  options=add_argument("--headless")    
-    Set Window Size    974    1040
-
-    Wait Until Element Is Visible    link=Sign in
-    Click Element    link=Sign in
-
-    Wait Until Element Is Visible    id=sign-in__email
-    Input Text    id=sign-in__email    psarevandrej325@gmail.com
-
-    Wait Until Element Is Visible    id=sign-in__password
-    Input Password    id=sign-in__password    Fylhtq2001!
-
-    Wait Until Element Is Visible    css=.form__button
-    Click Element    css=.form__button
-
-    Wait Until Page Contains    Home | Universe
+    ${headers}=    Create Dictionary    Content-Type=application/json
+    ${payload}=    Create Dictionary    email=psarevandrej325@gmail.com    password=Fylhtq2001!
+    ${response}=    Post Request    http://127.0.0.1:7000/login    headers=${headers}    json=${payload}
+    Should Be Equal    ${response.status_code}    200
+    ${json_response}=    Get Json Value    ${response.content}    as_dict=True
+    Should Be Equal As Strings    ${json_response.message}    "Login successful"
 
 Successful Add Blog Post
-    Open Browser    http://127.0.0.1:7000/    chrome  options=add_argument("--headless")
-    Set Window Size    974    1040
-
-    Wait Until Element Is Visible    link=Sign in
-    Click Element    link=Sign in
-
-    Wait Until Element Is Visible    id=sign-in__email
-    Input Text    id=sign-in__email    psarevandrej325@gmail.com
-
-    Wait Until Element Is Visible    id=sign-in__password
-    Input Password    id=sign-in__password    Fylhtq2001!
-
-    Wait Until Element Is Visible    css=.form__button
-    Click Element    css=.form__button
-
-    Wait Until Element Is Visible    link=Read more
-    Click Element    link=Read more
-
-    Wait Until Element Is Visible    css=.comment-form__textarea
-    Input Text    css=.comment-form__textarea    new comment
-
-    Wait Until Element Is Visible    css=.comment-form__button:nth-child(1)
-    Click Element    css=.comment-form__button:nth-child(1)
+    ${headers}=    Create Dictionary    Content-Type=application/json    
+    ${payload}=    Create Dictionary    title=My Blog Post    content=Lorem ipsum dolor sit amet
+    ${response}=    Post Request    http://127.0.0.1:7000/posts    headers=${headers}    json=${payload}
+    Should Be Equal    ${response.status_code}    201
+    ${json_response}=    Get Json Value    ${response.content}    as_dict=True
+    Should Be Equal As Strings    ${json_response.title}    "My Blog Post"
 
 Successful Add Comment
-    Open Browser    http://127.0.0.1:7000/    chrome  options=add_argument("--headless")
-    Set Window Size    974    1040
-
-    Wait Until Page Contains Element    link=Sign in
-    Click Element    link=Sign in
-
-    Wait Until Page Contains Element    id=sign-in__email
-    Input Text    id=sign-in__email    psarevandrej325@gmail.com
-
-    Wait Until Page Contains Element    id=sign-in__password
-    Input Password    id=sign-in__password    Fylhtq2001!
-
-    Wait Until Page Contains Element    css=.form__button
-    Click Element    css=.form__button
-
-    Wait Until Page Contains Element    link=New post
-    Click Element    link=New post
-
-
+    ${headers}=    Create Dictionary    Content-Type=application/json    
+    ${payload}=    Create Dictionary    post_id=123    comment=This is my comment
+    ${response}=    Post Request    http://127.0.0.1:7000/comments    headers=${headers}    json=${payload}
+    Should Be Equal    ${response.status_code}    201
+    ${json_response}=    Get Json Value    ${response.content}    as_dict=True
+    Should Be Equal As Strings    ${json_response.comment}    "This is my comment"
 
 Successful Registration
-    Open Browser    http://127.0.0.1:7000/    chrome  options=add_argument("--headless")
-    Set Window Size    974    1040
-
-    Click Element    css=.hero__button
-
-    Input Text    id=sign-up__first-name    Andrei
-    Input Text    id=sign-up__last-name    Psarev
-    Input Text    id=sign-up__email    psarevandrej327@gmail.com
-
-    Input Password    id=sign-up__password    Fylhtq2001!
-    Input Password    id=sign-up__confirm-password    Fylhtq2001!
-
-    Click Element    css=.form__button
-
-    Click Element    css=.alert__button
+    ${headers}=    Create Dictionary    Content-Type=application/json
+    ${payload}=    Create Dictionary    first_name=Andrei    last_name=Psarev    email=psarevandrej327@gmail.com    password=Fylhtq2001!
+    ${response}=    Post Request    http://127.0.0.1:7000/register    headers=${headers}    json=${payload}
+    Should Be Equal    ${response.status_code}    200
+    ${json_response}=    Get Json Value    ${response.content}    as_dict=True
+    Should Be Equal As Strings    ${json_response.message}    "Registration successful"
