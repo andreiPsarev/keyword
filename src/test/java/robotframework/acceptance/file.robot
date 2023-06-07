@@ -1,5 +1,7 @@
 *** Settings ***
 Library    SeleniumLibrary
+Library    Selenium2Library
+
 
 *** Test Cases ***
 Disabled Registration
