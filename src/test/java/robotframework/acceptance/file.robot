@@ -2,17 +2,6 @@
 Library    SeleniumLibrary
 
 *** Test Cases ***
-Disabled Registration
-    Set Window Size    974    1040
-    Click Element    css=.hero__button
-    Input Text    id=sign-up__first-name    Andrii
-    Input Text    id=sign-up__last-name    Psarov
-    Input Text    id=sign-up__password    gdfhderfh
-    Click Element    css=.form__button
-    ${feedback}    Get Text    css=.form__row:nth-child(4) > .form__feedback
-    Should Be Equal As Strings    ${feedback}    Enter a valid email
-    [Teardown]    Close Browser
-
 Login
     Set Window Size    974    1040
 
